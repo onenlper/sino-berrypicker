@@ -20,7 +20,7 @@ public class ChDictionary {
 		// System.out.println(ChDictionary.class.getResource("../../dict/surname")
 		// + "#");
 		this.surnames = Common.readSurname(ChDictionary.class.getResourceAsStream(
-				"../../dict/surname"));
+				"/dict/surname"));
 		this.locationSuffix = Common.readFile2Set(ChDictionary.class.getResourceAsStream("../../dict/location_suffix"));
 		// load gender number dictionary
 		// loadDemonymLists("dict/demonyms.txt");
