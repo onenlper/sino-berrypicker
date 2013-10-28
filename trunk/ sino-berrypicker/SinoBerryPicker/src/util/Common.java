@@ -581,9 +581,9 @@ public class Common {
 		return false;
 	}
 
-	public static HashSet<String> readSurname(String filename) {
+	public static HashSet<String> readSurname(InputStream stream) {
 		HashSet<String> surnames = new HashSet<String>();
-		BufferedReader br = getBr(filename);
+		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		try {
 			String line = br.readLine();
 			br.close();
