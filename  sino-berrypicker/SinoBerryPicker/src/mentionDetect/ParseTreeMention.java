@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import mentionDetection.chinese.ChineseMention;
 import model.EntityMention;
 import model.CoNLL.CoNLLPart;
-import util.OntoCommon;
 
 public class ParseTreeMention extends MentionDetect {
 
-	OntoCommon ontoCommon;
+//	OntoCommon ontoCommon;
 
 	@Override
 	public ArrayList<EntityMention> getMentions(CoNLLPart part) {
