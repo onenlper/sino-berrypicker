@@ -18,7 +18,6 @@ import model.CoNLL.CoNLLWord;
 import model.EntityMention.MentionType;
 import model.syntaxTree.MyTree;
 import model.syntaxTree.MyTreeNode;
-import ruleCoreference.english.EnDictionary;
 import util.Common.Animacy;
 import util.Common.Gender;
 import util.Common.Numb;
@@ -104,62 +103,6 @@ public class OntoCommon {
 		}
 		if (mHasExtra && aHasExtra) {
 			return true;
-		}
-		return false;
-	}
-
-	public boolean isRelativePronoun(EntityMention ant, EntityMention mention, CoNLLPart part) {
-		if(ant.position[0] != mention.position[0]) {
-			return false;
-		}
-		Tree tree = part.getCoNLLSentences().get(ant.position[0]).stdTree;
-		String relativePronounPattern = "NP < (NP=m1 $.. (SBAR < (WHNP < WP|WDT=m2)))";
-		TregexPattern tgrepPattern = TregexPattern.compile(relativePronounPattern);
-		TregexMatcher m = tgrepPattern.matcher(tree);
-		while (m.find()) {
-			Tree np1 = m.getNode("m1");
-			Tree np2 = m.getNode("m2");
-			int start1 = (int) ((CoreLabel) np1.label()).get(BeginIndexAnnotation.class);
-			int end1 = (int) ((CoreLabel) np1.label()).get(EndIndexAnnotation.class) - 1;
-			int start2 = (int) ((CoreLabel) np2.label()).get(BeginIndexAnnotation.class);
-			int end2 = (int) ((CoreLabel) np2.label()).get(EndIndexAnnotation.class) - 1;
-			if (start1 == ant.start && end1 == ant.end && start2 == mention.start && end2 == mention.end) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean isEnglishAppositive2(EntityMention ant, EntityMention mention, CoNLLPart part) {
-		if (ant.position[0] != mention.position[0]) {
-			return false;
-		}
-		Tree tree = part.getCoNLLSentences().get(ant.position[0]).stdTree;
-		String pattens[] = new String[4];
-		pattens[0] = "NP=m1 < (NP=m2 $.. (/,/ $.. NP=m3))";
-		pattens[1] = "NP=m1 < (NP=m2 $.. (/,/ $.. (SBAR < (WHNP < WP|WDT=m3))))";
-		pattens[2] = "/^NP(?:-TMP|-ADV)?$/=m1 < (NP=m2 $- /^,$/ $-- NP=m3 !$ CC|CONJP)";
-		pattens[3] = "/^NP(?:-TMP|-ADV)?$/=m2 < (PRN=m3 < (NP < /^NNS?|CD$/ $-- /^-LRB-$/ $+ /^-RRB-$/))";
-		for (String pattern : pattens) {
-			try {
-				TregexPattern tgrepPattern = TregexPattern.compile(pattern);
-				TregexMatcher m = tgrepPattern.matcher(tree);
-				while (m.find()) {
-					Tree np2 = m.getNode("m2");
-					Tree np3 = m.getNode("m3");
-					int start1 = (int) ((CoreLabel) np2.label()).get(BeginIndexAnnotation.class);
-					int end1 = (int) ((CoreLabel) np2.label()).get(EndIndexAnnotation.class) - 1;
-					int start2 = (int) ((CoreLabel) np3.label()).get(BeginIndexAnnotation.class);
-					int end2 = (int) ((CoreLabel) np3.label()).get(EndIndexAnnotation.class) - 1;
-					if (start1 == ant.start && end1 == ant.end && start2 == mention.start && end2 == mention.end) {
-//						System.out.println(ant.original + " # " + mention.original);
-						return true;
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.exit(0);
-			}
 		}
 		return false;
 	}

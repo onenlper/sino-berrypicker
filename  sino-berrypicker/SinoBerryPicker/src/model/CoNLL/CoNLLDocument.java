@@ -120,7 +120,6 @@ public class CoNLLDocument {
 				}
 				sentence.addSyntaxTree(parseTree);
 				if(this.language.equalsIgnoreCase("english")) {
-					sentence.addStdTree(parseTree);
 				}
 				part.addSentence(sentence);
 				sentence = null;

@@ -6,15 +6,8 @@ import java.util.ArrayList;
 
 import model.syntaxTree.MyTree;
 import util.Common;
-import ace.SemanticRole;
-import edu.stanford.nlp.trees.LabeledScoredTreeFactory;
-import edu.stanford.nlp.trees.PennTreeReader;
-import edu.stanford.nlp.trees.Tree;
-import edu.stanford.nlp.trees.TreeReader;
 
 public class CoNLLSentence {
-	
-	public ArrayList<SemanticRole> roles = new ArrayList<SemanticRole>();
 	
 	public String getText() {
 		StringBuilder sb = new StringBuilder();
@@ -126,8 +119,6 @@ public class CoNLLSentence {
 
 	public MyTree syntaxTree;
 
-	public Tree stdTree;
-
 	public ArrayList<String> depends;
 
 	public ArrayList<int[]> positions;
@@ -152,17 +143,4 @@ public class CoNLLSentence {
 		this.syntaxTree = Common.constructTree(syntaxStr);
 	}
 
-	private static LabeledScoredTreeFactory treeFactory = new LabeledScoredTreeFactory();
-
-	public void addStdTree(String syntaxStr) {
-		TreeReader treeReader = new PennTreeReader(new StringReader(syntaxStr), treeFactory);
-		try {
-			this.stdTree = treeReader.readTree();
-			this.stdTree.indexSpans(0);
-			treeReader.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }
