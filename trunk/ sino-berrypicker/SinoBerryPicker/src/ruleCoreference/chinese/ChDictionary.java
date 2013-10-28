@@ -21,7 +21,7 @@ public class ChDictionary {
 		// + "#");
 		this.surnames = Common.readSurname(ChDictionary.class.getResourceAsStream(
 				"/dict/surname"));
-		this.locationSuffix = Common.readFile2Set(ChDictionary.class.getResourceAsStream("../../dict/location_suffix"));
+		this.locationSuffix = Common.readFile2Set(ChDictionary.class.getResourceAsStream("/dict/location_suffix"));
 		// load gender number dictionary
 		// loadDemonymLists("dict/demonyms.txt");
 		// loadStateAbbreviation("dict/state-abbreviations.txt");
@@ -29,19 +29,19 @@ public class ChDictionary {
 		// adjectiveNation.removeAll(demonyms.keySet());
 
 		animateHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
-				"../../dict/chinese_animate"));
+				"/dict/chinese_animate"));
 		inanimateHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
-				"../../dict/chinese_inanimate"));
+				"/dict/chinese_inanimate"));
 		maleHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
-				"../../dict/chinese_male"));
+				"/dict/chinese_male"));
 		femaleHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
-				"../../dict/chinese_female"));
+				"/dict/chinese_female"));
 		singleHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
-				"../../dict/chinese_single"));
+				"/dict/chinese_single"));
 		pluraHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
-				"../../dict/chinese_plura"));
+				"/dict/chinese_plura"));
 		countries = Common.readFile2Set(ChDictionary.class.getResourceAsStream(
-				"../../dict/country2"));
+				"/dict/country2"));
 	}
 
 	public HashSet<String> countries;
