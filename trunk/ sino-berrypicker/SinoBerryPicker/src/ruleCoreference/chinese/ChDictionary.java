@@ -19,30 +19,30 @@ public class ChDictionary {
 		allPronouns.addAll(otherPronouns);
 		// System.out.println(ChDictionary.class.getResource("../../dict/surname")
 		// + "#");
+		System.out.println(ChDictionary.class.getResource(".").getPath());
 		this.surnames = Common.readSurname(ChDictionary.class.getResource(
 				"../../dict/surname").getPath());
-		this.locationSuffix = Common.readFile2Set(ChDictionary.class
-				.getResource("../../dict/location_suffix").getPath());
+		this.locationSuffix = Common.readFile2Set(ChDictionary.class.getResourceAsStream("../../dict/location_suffix"));
 		// load gender number dictionary
 		// loadDemonymLists("dict/demonyms.txt");
 		// loadStateAbbreviation("dict/state-abbreviations.txt");
 		// adjectiveNation.addAll(demonymSet);
 		// adjectiveNation.removeAll(demonyms.keySet());
 
-		animateHead = Common.readFile2Map(ChDictionary.class.getResource(
-				"../../dict/chinese_animate").getPath());
-		inanimateHead = Common.readFile2Map(ChDictionary.class.getResource(
-				"../../dict/chinese_inanimate").getPath());
-		maleHead = Common.readFile2Map(ChDictionary.class.getResource(
-				"../../dict/chinese_male").getPath());
-		femaleHead = Common.readFile2Map(ChDictionary.class.getResource(
-				"../../dict/chinese_female").getPath());
-		singleHead = Common.readFile2Map(ChDictionary.class.getResource(
-				"../../dict/chinese_single").getPath());
-		pluraHead = Common.readFile2Map(ChDictionary.class.getResource(
-				"../../dict/chinese_plura").getPath());
-		countries = Common.readFile2Set(ChDictionary.class.getResource(
-				"../../dict/country2").getPath());
+		animateHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
+				"../../dict/chinese_animate"));
+		inanimateHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
+				"../../dict/chinese_inanimate"));
+		maleHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
+				"../../dict/chinese_male"));
+		femaleHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
+				"../../dict/chinese_female"));
+		singleHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
+				"../../dict/chinese_single"));
+		pluraHead = Common.readFile2Map(ChDictionary.class.getResourceAsStream(
+				"../../dict/chinese_plura"));
+		countries = Common.readFile2Set(ChDictionary.class.getResourceAsStream(
+				"../../dict/country2"));
 	}
 
 	public HashSet<String> countries;
@@ -119,9 +119,6 @@ public class ChDictionary {
 
 	public final Set<String> personPronouns = new HashSet<String>();
 	public final Set<String> allPronouns = new HashSet<String>();
-	public final Set<String> quantifiers = new HashSet<String>(Arrays.asList(
-			"not", "every", "any", "none", "everything", "anything", "nothing",
-			"all", "enough"));
 	public final Set<String> parts = new HashSet<String>(Arrays.asList("不少",
 			"很多", "一些", "有些", "部分", "多数", "少数", "更多", "更少", "所有", "一个",
 			"hundred", "thousand", "million", "billion", "tens", "dozens",
@@ -193,15 +190,15 @@ public class ChDictionary {
 	public final Set<String> firstPersonPronouns = new HashSet<String>(
 			Arrays.asList(new String[] { "我", "我们", "俺", "大家", "本人", "咱们",
 					"ourselves", "ours", "our" }));
-	public final Set<String> moneyPercentNumberPronouns = new HashSet<String>(
-			Arrays.asList(new String[] { "it", "its" }));
-	public final Set<String> dateTimePronouns = new HashSet<String>(
-			Arrays.asList(new String[] { "when" }));
-	public final Set<String> organizationPronouns = new HashSet<String>(
-			Arrays.asList(new String[] { "it", "its", "they", "their", "them",
-					"which" }));
-	public final Set<String> locationPronouns = new HashSet<String>(
-			Arrays.asList(new String[] { "it", "its", "where", "here", "there" }));
+//	public final Set<String> moneyPercentNumberPronouns = new HashSet<String>(
+//			Arrays.asList(new String[] { "it", "its" }));
+//	public final Set<String> dateTimePronouns = new HashSet<String>(
+//			Arrays.asList(new String[] { "when" }));
+//	public final Set<String> organizationPronouns = new HashSet<String>(
+//			Arrays.asList(new String[] { "it", "its", "they", "their", "them",
+//					"which" }));
+//	public final Set<String> locationPronouns = new HashSet<String>(
+//			Arrays.asList(new String[] { "it", "its", "where", "here", "there" }));
 	public final Set<String> inanimatePronouns = new HashSet<String>(
 			Arrays.asList(new String[] { "它", "它们", "这", "那", "这些", "那些", "什么",
 					"哪个", "其它", "那里" }));
@@ -215,48 +212,14 @@ public class ChDictionary {
 					"one", "oneself", "one's", "they", "them", "themself",
 					"themselves", "theirs", "their", "they", "them", "'em",
 					"themselves", "who", "whom", "whose" }));
-	public final Set<String> indefinitePronouns = new HashSet<String>(
-			Arrays.asList(new String[] { "another", "anybody", "anyone",
-					"anything", "each", "either", "enough", "everybody",
-					"everyone", "everything", "less", "little", "much",
-					"neither", "no one", "nobody", "nothing", "one", "other",
-					"plenty", "somebody", "someone", "something", "both",
-					"few", "fewer", "many", "others", "several", "all", "any",
-					"more", "most", "none", "some", "such" }));
 
 	public final Set<String> relativePronouns = new HashSet<String>(
 			Arrays.asList(new String[] { "that", "who", "which", "whom",
 					"where", "whose" }));
-	public final Set<String> GPEPronouns = new HashSet<String>(
-			Arrays.asList(new String[] { "it", "itself", "its", "they", "where" }));
 
-	public final Set<String> facilityVehicleWeaponPronouns = new HashSet<String>(
-			Arrays.asList(new String[] { "it", "itself", "its", "they", "where" }));
-	public final Set<String> miscPronouns = new HashSet<String>(
-			Arrays.asList(new String[] { "it", "itself", "its", "they", "where" }));
 	public final Set<String> reflexivePronouns = new HashSet<String>(
 			Arrays.asList(new String[] { "自己", "本身", "yourselves", "himself",
 					"herself", "itself", "ourselves", "themselves", "oneself" }));
-	public final Set<String> transparentNouns = new HashSet<String>(
-			Arrays.asList(new String[] { "bunch", "group", "breed", "class",
-					"ilk", "kind", "half", "segment", "top", "bottom", "glass",
-					"bottle", "box", "cup", "gem", "idiot", "unit", "part",
-					"stage", "name", "division", "label", "group", "figure",
-					"series", "member", "members", "first", "version", "site",
-					"side", "role", "largest", "title", "fourth", "third",
-					"second", "number", "place", "trio", "two", "one",
-					"longest", "highest", "shortest", "head", "resident",
-					"collection", "result", "last" }));
-
-	public final Set<String> stopWords = new HashSet<String>(
-			Arrays.asList(new String[] { "the", "of", "at", "on", "upon", "in",
-					"to", "from", "out", "as", "so", "such", "or", "and",
-					"those", "this", "these", "that", "for", ",", "is", "was",
-					"am", "are", "'s", "been", "were" }));
-	public final Set<String> notOrganizationPRP = new HashSet<String>(
-			Arrays.asList(new String[] { "i", "me", "myself", "mine", "my",
-					"yourself", "he", "him", "himself", "his", "she", "her",
-					"herself", "hers", "here" }));
 
 	public final Set<String> reportVerb = new HashSet<String>(Arrays.asList(
 			"表示", "讲起", "说话", "说", "表示", "讲起", "说话", "说", "指出", "介绍", "认为",
