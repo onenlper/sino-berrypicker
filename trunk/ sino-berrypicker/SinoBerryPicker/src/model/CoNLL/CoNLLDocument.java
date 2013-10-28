@@ -10,8 +10,8 @@ import java.util.List;
 import model.Element;
 import model.Entity;
 import model.EntityMention;
+import util.ChCommon;
 import util.Common;
-import util.OntoCommon;
 
 /*
  * CoNLL-2012 Format Document
@@ -46,11 +46,14 @@ public class CoNLLDocument {
 	
 	private ArrayList<CoNLLPart> parts;
 	
-	public OntoCommon ontoCommon;
+//	public OntoCommon ontoCommon;
+	
+	public ChCommon ontoCommon;
 	
 	public CoNLLDocument() {
 		this.parts = new ArrayList<CoNLLPart>();
-		this.ontoCommon = new OntoCommon("chinese");
+//		this.ontoCommon = new OntoCommon("chinese");
+		this.ontoCommon = new ChCommon("chinese");
 	}
 	
 	public CoNLLDocument(String path) {
@@ -74,7 +77,8 @@ public class CoNLLDocument {
 			//default english
 			this.language = "english";
 		}
-		this.ontoCommon = new OntoCommon(this.getLanguage());
+//		this.ontoCommon = new OntoCommon(this.getLanguage());
+		this.ontoCommon = new ChCommon("chinese");
 		this.rawLines = Common.getLines(path);
 		int i = path.lastIndexOf(".");
 		if(i!=-1) {

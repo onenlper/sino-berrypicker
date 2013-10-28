@@ -1817,29 +1817,29 @@ public class ChCommon {
 		return false;
 	}
 
-	public boolean isDemonym(EntityMention em1, EntityMention em2) {
-		String thisString = em1.original.toLowerCase();
-		String antString = em2.original.toLowerCase();
-		if (thisString.startsWith("the ")) {
-			thisString = thisString.substring(4);
-		}
-		if (antString.startsWith("the ")) {
-			antString = antString.substring(4);
-		}
-		if (dict.statesAbbreviation.containsKey(em1.original)
-				&& dict.statesAbbreviation.get(em1.original).equals(em2.original)
-				|| dict.statesAbbreviation.containsKey(em2.original)
-				&& dict.statesAbbreviation.get(em1.original).equals(em1.original))
-			return true;
-		if (dict.demonyms.get(thisString) != null) {
-			if (dict.demonyms.get(thisString).contains(antString))
-				return true;
-		} else if (dict.demonyms.get(antString) != null) {
-			if (dict.demonyms.get(antString).contains(thisString))
-				return true;
-		}
-		return false;
-	}
+//	public boolean isDemonym(EntityMention em1, EntityMention em2) {
+//		String thisString = em1.original.toLowerCase();
+//		String antString = em2.original.toLowerCase();
+//		if (thisString.startsWith("the ")) {
+//			thisString = thisString.substring(4);
+//		}
+//		if (antString.startsWith("the ")) {
+//			antString = antString.substring(4);
+//		}
+//		if (dict.statesAbbreviation.containsKey(em1.original)
+//				&& dict.statesAbbreviation.get(em1.original).equals(em2.original)
+//				|| dict.statesAbbreviation.containsKey(em2.original)
+//				&& dict.statesAbbreviation.get(em1.original).equals(em1.original))
+//			return true;
+//		if (dict.demonyms.get(thisString) != null) {
+//			if (dict.demonyms.get(thisString).contains(antString))
+//				return true;
+//		} else if (dict.demonyms.get(antString) != null) {
+//			if (dict.demonyms.get(antString).contains(thisString))
+//				return true;
+//		}
+//		return false;
+//	}
 
 	public boolean isRoleAppositive(EntityMention antecedent, EntityMention mention, CoNLLPart part) {
 		if (antecedent.end + 1 == mention.start && antecedent.treeNode.parent == mention.treeNode.parent
@@ -1855,28 +1855,28 @@ public class ChCommon {
 		return false;
 	}
 
-	public boolean isEnglishDemonym(EntityMention antecedent, EntityMention em) {
-		String thisString = antecedent.original.toLowerCase();
-		String antString = em.original.toLowerCase();
-		if (thisString.startsWith("the ") || thisString.startsWith("The ")) {
-			thisString = thisString.substring(4);
-		}
-		if (antString.startsWith("the ") || antString.startsWith("The "))
-			antString = antString.substring(4);
-
-		if (this.getChDictionary().statesAbbreviation.containsKey(em.original)
-				&& this.getChDictionary().statesAbbreviation.get(em.original).equals(antecedent.original)
-				|| this.getChDictionary().statesAbbreviation.containsKey(antecedent.original)
-				&& this.getChDictionary().statesAbbreviation.get(antecedent.original).equals(em.original))
-			return true;
-
-		if (this.getChDictionary().demonyms.get(thisString) != null) {
-			if (this.getChDictionary().demonyms.get(thisString).contains(antString))
-				return true;
-		} else if (this.getChDictionary().demonyms.get(antString) != null) {
-			if (this.getChDictionary().demonyms.get(antString).contains(thisString))
-				return true;
-		}
-		return false;
-	}
+//	public boolean isEnglishDemonym(EntityMention antecedent, EntityMention em) {
+//		String thisString = antecedent.original.toLowerCase();
+//		String antString = em.original.toLowerCase();
+//		if (thisString.startsWith("the ") || thisString.startsWith("The ")) {
+//			thisString = thisString.substring(4);
+//		}
+//		if (antString.startsWith("the ") || antString.startsWith("The "))
+//			antString = antString.substring(4);
+//
+//		if (this.getChDictionary().statesAbbreviation.containsKey(em.original)
+//				&& this.getChDictionary().statesAbbreviation.get(em.original).equals(antecedent.original)
+//				|| this.getChDictionary().statesAbbreviation.containsKey(antecedent.original)
+//				&& this.getChDictionary().statesAbbreviation.get(antecedent.original).equals(em.original))
+//			return true;
+//
+//		if (this.getChDictionary().demonyms.get(thisString) != null) {
+//			if (this.getChDictionary().demonyms.get(thisString).contains(antString))
+//				return true;
+//		} else if (this.getChDictionary().demonyms.get(antString) != null) {
+//			if (this.getChDictionary().demonyms.get(antString).contains(thisString))
+//				return true;
+//		}
+//		return false;
+//	}
 }

@@ -306,7 +306,7 @@ public class CoNLLPart {
 								CoNLLWord reportW = null;
 								while (backTrace >= 0 && !this.getWord(backTrace).posTag.equalsIgnoreCase("PU")) {
 									CoNLLWord w = this.getWord(backTrace);
-									if (this.getDocument().ontoCommon.getEnDictionary().reportVerb.contains(w.word)
+									if (this.getDocument().ontoCommon.getChDictionary().reportVerb.contains(w.word)
 											|| w.word.equalsIgnoreCase("说")) {
 										MyTreeNode vv = w.getSentence().getSyntaxTree().leaves.get(w.indexInSentence);
 										while(true) {
@@ -327,7 +327,7 @@ public class CoNLLPart {
 									int forwardTrace = end + 1;
 									while (forwardTrace < this.wordCount && !this.getWord(forwardTrace).posTag.equalsIgnoreCase("PU")) {
 										CoNLLWord w = this.getWord(forwardTrace);
-										if (this.getDocument().ontoCommon.getEnDictionary().reportVerb.contains(w.word)
+										if (this.getDocument().ontoCommon.getChDictionary().reportVerb.contains(w.word)
 											|| w.word.equalsIgnoreCase("说")) 
 										{
 											VP = w.getSentence().getSyntaxTree().leaves.get(w.indexInSentence).parent.parent;
