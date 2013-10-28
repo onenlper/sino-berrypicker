@@ -8,13 +8,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -56,13 +56,15 @@ public class Common {
 	}
 
 	public static String concat(String antHead, String mHead) {
-		return antHead.compareTo(mHead) > 0 ? (antHead + "_" + mHead) : (mHead + "_" + antHead);
+		return antHead.compareTo(mHead) > 0 ? (antHead + "_" + mHead) : (mHead
+				+ "_" + antHead);
 	}
 
 	public static String wordnet = "/usr/local/WordNet-3.0/";
 
 	// cache, store file content
-	public static HashMap<String, ArrayList<String>> fileCache = new HashMap<String, ArrayList<String>>();
+	// public static HashMap<String, ArrayList<String>> fileCache = new
+	// HashMap<String, ArrayList<String>>();
 
 	public static String getXMLFile(String xmlFn) {
 		StringBuilder sb = new StringBuilder();
@@ -111,7 +113,8 @@ public class Common {
 
 	public static boolean isPronoun(String str) {
 		if (pronouns == null) {
-			pronouns = Common.readFile2Set(dicPath + "pronoun");
+			pronouns = Common.readFile2Set(Common.class
+					.getResourceAsStream("../dict/pronoun"));
 		}
 		if (pronouns.contains(str)) {
 			return true;
@@ -133,7 +136,8 @@ public class Common {
 	public static int PRONOUN_WHO = 10;
 
 	public static int getPronounType(String str) {
-		if (str.equals("我") || str.equals("俺") || str.equals("自己") || str.equals("本身") || str.equals("本人")) {
+		if (str.equals("我") || str.equals("俺") || str.equals("自己")
+				|| str.equals("本身") || str.equals("本人")) {
 			return PRONOUN_ME;
 		} else if (str.equals("你") || str.equals("您")) {
 			return PRONOUN_YOU;
@@ -141,8 +145,8 @@ public class Common {
 			return PRONOUN_HE;
 		} else if (str.equals("她")) {
 			return PRONOUN_SHE;
-		} else if (str.equals("它") || str.equals("这") || str.equals("那") || str.equals("那里") || str.equals("其它")
-				|| str.equals("其")) {
+		} else if (str.equals("它") || str.equals("这") || str.equals("那")
+				|| str.equals("那里") || str.equals("其它") || str.equals("其")) {
 			return PRONOUN_IT;
 		} else if (str.equals("他们") || str.equals("双方")) {
 			return PRONOUN_HE_S;
@@ -152,7 +156,8 @@ public class Common {
 			return PRONOUN_SHE_S;
 		} else if (str.equals("你们")) {
 			return PRONOUN_YOU_S;
-		} else if (str.equals("它们") || str.equals("这些") || str.equals("那些") || str.equals("一些")) {
+		} else if (str.equals("它们") || str.equals("这些") || str.equals("那些")
+				|| str.equals("一些")) {
 			return PRONOUN_IT_S;
 		} else if (str.equals("谁") || str.equals("什么") || str.equals("哪个")) {
 			return PRONOUN_WHO;
@@ -178,25 +183,28 @@ public class Common {
 	public static boolean isAbbreviation(String str1, String str2) {
 		if (abbreHash == null) {
 			abbreHash = new HashMap<String, Integer>();
-			ArrayList<String> lines = Common.getLines(dicPath + "abbreviation");
+			ArrayList<String> lines = Common.getLines(Common.class.getResourceAsStream("../dict/abbreviation"));
 			for (int i = 0; i < lines.size(); i++) {
 				String line = lines.get(i);
 				String tokens[] = line.split("\\s+");
 				for (String token : tokens) {
 					abbreHash.put(token, i);
 					if (token.endsWith("省") || token.endsWith("市")) {
-						abbreHash.put(token.substring(0, token.length() - 1), i);
+						abbreHash
+								.put(token.substring(0, token.length() - 1), i);
 					}
 				}
 			}
 		}
 		if (abbreHash.containsKey(str1) && abbreHash.containsKey(str2)) {
-			return (abbreHash.get(str1).intValue() == abbreHash.get(str2).intValue());
+			return (abbreHash.get(str1).intValue() == abbreHash.get(str2)
+					.intValue());
 		} else {
 			String l = str1.length() < str2.length() ? str2 : str1;
 			String s = str1.length() >= str2.length() ? str2 : str1;
 			if (l.substring(0, l.length() - 1).equalsIgnoreCase(s)
-					&& (l.charAt(l.length() - 1) == '省' || l.charAt(l.length() - 1) == '市')) {
+					&& (l.charAt(l.length() - 1) == '省' || l
+							.charAt(l.length() - 1) == '市')) {
 				return true;
 			} else {
 				return false;
@@ -239,27 +247,41 @@ public class Common {
 		}
 		return lines.toString();
 	}
-
-	public static ArrayList<String> getLines(String filename) {
-		if (fileCache.containsKey(filename)) {
-			return fileCache.get(filename);
-		} else {
-			ArrayList<String> lines = null;
-			try {
-				lines = new ArrayList<String>();
-				BufferedReader br = getBr(filename);
-				String line;
-				while ((line = br.readLine()) != null) {
-					lines.add(line);
-				}
-				br.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	
+	public static ArrayList<String> getLines(String fn) {
+		ArrayList<String> lines = null;
+		try {
+			lines = new ArrayList<String>();
+			BufferedReader br = getBr(fn);
+			String line;
+			while ((line = br.readLine()) != null) {
+				lines.add(line);
 			}
-			// fileCache.put(filename, lines);
-			return lines;
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		// fileCache.put(filename, lines);
+		return lines;
+	}
+
+	public static ArrayList<String> getLines(InputStream stream) {
+		ArrayList<String> lines = null;
+		try {
+			lines = new ArrayList<String>();
+			BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+			String line;
+			while ((line = br.readLine()) != null) {
+				lines.add(line);
+			}
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// fileCache.put(filename, lines);
+		return lines;
 	}
 
 	public static void outputLines(ArrayList<String> lines, String filename) {
@@ -276,7 +298,7 @@ public class Common {
 		}
 	}
 
-	//	
+	//
 	// public static void outputHashMap(HashMap<String, Integer> map,
 	// String filename) {
 	// try {
@@ -290,7 +312,7 @@ public class Common {
 	// e.printStackTrace();
 	// }
 	// }
-	//	
+	//
 	public static void outputHashMap(HashMap map, String filename) {
 		try {
 			FileWriter fw = new FileWriter(filename);
@@ -305,7 +327,8 @@ public class Common {
 					}
 					fw.write(sb.toString().trim() + "\n");
 				} else {
-					fw.write(str.toString() + " " + map.get(str).toString() + "\n");
+					fw.write(str.toString() + " " + map.get(str).toString()
+							+ "\n");
 				}
 			}
 			fw.close();
@@ -328,11 +351,12 @@ public class Common {
 		}
 	}
 
-	public static HashSet<String> readFile2Set(String filename) {
+	public static HashSet<String> readFile2Set(InputStream stream) {
 		HashSet<String> set = null;
 		try {
 			set = new HashSet<String>();
-			BufferedReader br = new BufferedReader(new FileReader(filename));
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(stream));
 			String line;
 			while ((line = br.readLine()) != null) {
 				set.add(line.trim());
@@ -380,11 +404,12 @@ public class Common {
 		return map;
 	}
 
-	public static HashMap<String, Integer> readFile2Map(String filename) {
+	public static HashMap<String, Integer> readFile2Map(InputStream stream) {
 		HashMap<String, Integer> map = null;
 		try {
 			map = new HashMap<String, Integer>();
-			BufferedReader br = new BufferedReader(new FileReader(filename));
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(stream));
 			String line;
 			while ((line = br.readLine()) != null) {
 				if (line.isEmpty()) {
@@ -392,7 +417,8 @@ public class Common {
 				}
 				int pos = line.lastIndexOf(' ');
 				String str = line.substring(0, pos);
-				int value = Integer.valueOf(line.substring(pos + 1, line.length()));
+				int value = Integer.valueOf(line.substring(pos + 1,
+						line.length()));
 				map.put(str, value);
 			}
 			br.close();
@@ -406,8 +432,9 @@ public class Common {
 		}
 		return map;
 	}
-	
-	public static HashMap<String, Integer> readFile2Map(String filename, char split) {
+
+	public static HashMap<String, Integer> readFile2Map(String filename,
+			char split) {
 		HashMap<String, Integer> map = null;
 		try {
 			map = new HashMap<String, Integer>();
@@ -419,7 +446,8 @@ public class Common {
 				}
 				int pos = line.lastIndexOf(split);
 				String str = line.substring(0, pos);
-				int value = Integer.valueOf(line.substring(pos + 1, line.length()));
+				int value = Integer.valueOf(line.substring(pos + 1,
+						line.length()));
 				map.put(str, value);
 			}
 			br.close();
@@ -469,7 +497,8 @@ public class Common {
 			while ((line = br.readLine()) != null) {
 				int pos = line.lastIndexOf(' ');
 				String str = line.substring(0, pos);
-				double value = Double.valueOf(line.substring(pos + 1, line.length()));
+				double value = Double.valueOf(line.substring(pos + 1,
+						line.length()));
 				map.put(str, value);
 			}
 			br.close();
@@ -487,7 +516,7 @@ public class Common {
 	public static HashMap<String, String> readFile2Map2(String filename) {
 		return readFile2Map2(filename, ' ');
 	}
-	
+
 	public static HashMap<String, String> readFile2Map2(String filename, char c) {
 		HashMap<String, String> map = null;
 		try {
@@ -512,7 +541,8 @@ public class Common {
 		return map;
 	}
 
-	public static HashMap<String, Integer> combineHashMap(HashMap<String, Integer> total, HashMap<String, Integer> map) {
+	public static HashMap<String, Integer> combineHashMap(
+			HashMap<String, Integer> total, HashMap<String, Integer> map) {
 		for (String str : map.keySet()) {
 			int value = map.get(str);
 			if (total.containsKey(str)) {
@@ -545,7 +575,8 @@ public class Common {
 
 	// determine if this is a stop sign punctuation
 	public static boolean isPun(char c) {
-		if (c == '。' || c == '？' || c == '！' || c == '．' || c == '：' || c == '，' || c == '；')
+		if (c == '。' || c == '？' || c == '！' || c == '．' || c == '：'
+				|| c == '，' || c == '；')
 			return true;
 		return false;
 	}
@@ -682,7 +713,8 @@ public class Common {
 		return tree;
 	}
 
-	public static String dicPath = "/users/yzcchen/workspace/ACL12/src/dict/";
+	// public static String dicPath =
+	// "/users/yzcchen/workspace/ACL12/src/dict/";
 	// public static String dicPath = "./dict/";
 
 	private static HashMap<String, String[]> semanticDic;
@@ -696,7 +728,8 @@ public class Common {
 
 	private static HashMap<String, String[]> loadSemanticDic() {
 		HashMap<String, String[]> semanticDic = new HashMap<String, String[]>();
-		ArrayList<String> lines = Common.getLines(dicPath + "TongyiciCiLin_8.txt");
+		ArrayList<String> lines = Common.getLines(Common.class
+				.getResourceAsStream("../dict/TongyiciCiLin_8.txt"));
 		for (String line : lines) {
 			String tokens[] = line.split("\\s+");
 			String word = tokens[0];
@@ -811,25 +844,24 @@ public class Common {
 		// }
 	}
 
-	private static HashSet<String> male = null;
-	private static HashSet<String> female = null;
-
+	// private static HashSet<String> male = null;
+	// private static HashSet<String> female = null;
 	// determine gender, 0 for male, 1 for female, 2 for unknown
-	public static Gender getGender(String str) {
-		if (male == null) {
-			male = Common.readFile2Set(Common.dicPath + "male");
-		}
-		if (female == null) {
-			female = Common.readFile2Set(Common.dicPath + "female");
-		}
-		if (male.contains(str)) {
-			return Gender.MALE;
-		} else if (female.contains(str)) {
-			return Gender.FEMALE;
-		} else {
-			return Gender.UNKNOWN;
-		}
-	}
+	// public static Gender getGender(String str) {
+	// if (male == null) {
+	// male = Common.readFile2Set(Common.dicPath + "male");
+	// }
+	// if (female == null) {
+	// female = Common.readFile2Set(Common.dicPath + "female");
+	// }
+	// if (male.contains(str)) {
+	// return Gender.MALE;
+	// } else if (female.contains(str)) {
+	// return Gender.FEMALE;
+	// } else {
+	// return Gender.UNKNOWN;
+	// }
+	// }
 
 	public static int getEditDistance(String s, String t) {
 		int d[][]; // matrix
@@ -877,7 +909,8 @@ public class Common {
 					cost = 1;
 				}
 				// Step 6
-				d[i][j] = Minimum(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+				d[i][j] = Minimum(d[i - 1][j] + 1, d[i][j - 1] + 1,
+						d[i - 1][j - 1] + cost);
 			}
 		}
 		// Step 7
@@ -902,14 +935,14 @@ public class Common {
 		int offset = 1;
 		for (Feature fea : feas) {
 			if (fea.value != 0) {
-				sb.append(fea.idx + offset).append(":").append(fea.value).append(" ");
+				sb.append(fea.idx + offset).append(":").append(fea.value)
+						.append(" ");
 			}
 			offset += fea.space;
 		}
 
 		return sb.toString().trim();
 	}
-
 
 	public static class Feature {
 		int idx;
@@ -920,44 +953,44 @@ public class Common {
 			this.idx = idx;
 			this.value = value;
 			this.space = space;
-			
-			if(this.idx>=this.space) {
+
+			if (this.idx >= this.space) {
 				bangErrorPOS("feature idx cannot equal or larger than feature space.");
 			}
 		}
 	}
-	
+
 	public static void bangErrorPOS(String message) {
 		try {
 			System.err.println("Error: " + message);
 			throw new Exception();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 	}
 
-	public static <T> double[] getRPF(ArrayList<ArrayList<T>> goldses, ArrayList<ArrayList<T>> systemses) {
+	public static <T> double[] getRPF(ArrayList<ArrayList<T>> goldses,
+			ArrayList<ArrayList<T>> systemses) {
 		double goldAll = 0;
 		double systemAll = 0;
 		double hitAll = 0;
 
 		Iterator<ArrayList<T>> goldIts = goldses.iterator();
 		Iterator<ArrayList<T>> systemIts = systemses.iterator();
-		
-		while(goldIts.hasNext()) {
+
+		while (goldIts.hasNext()) {
 			Collection<T> golds = goldIts.next();
 			Collection<T> systems = systemIts.next();
 			goldAll += golds.size();
 			systemAll += systems.size();
-			
+
 			Iterator<T> goldIt = golds.iterator();
 
-			while(goldIt.hasNext()) {
+			while (goldIt.hasNext()) {
 				Object gold = goldIt.next();
 				Iterator<T> systemIt = systems.iterator();
-				while(systemIt.hasNext()) {
+				while (systemIt.hasNext()) {
 					Object system = systemIt.next();
 					if (gold.equals(system)) {
 						hitAll++;
@@ -993,7 +1026,8 @@ public class Common {
 		}
 	}
 
-	public static MyTreeNode getLowestCommonAncestor(MyTreeNode left, MyTreeNode right) {
+	public static MyTreeNode getLowestCommonAncestor(MyTreeNode left,
+			MyTreeNode right) {
 		MyTreeNode ancestor = null;
 		ArrayList<MyTreeNode> leftAns = left.getAncestors();
 		ArrayList<MyTreeNode> rightAns = right.getAncestors();
@@ -1006,32 +1040,32 @@ public class Common {
 	}
 
 	public static boolean isAncestor(MyTreeNode down, MyTreeNode up) {
-		if(down==null || up==null) {
+		if (down == null || up == null) {
 			return false;
 		}
 		boolean ance = false;
-		for(MyTreeNode n : down.getAncestors()) {
-			if(n==up) {
+		for (MyTreeNode n : down.getAncestors()) {
+			if (n == up) {
 				ance = true;
 				break;
 			}
 		}
 		return ance;
 	}
-	
+
 	public static double getValue(HashMap<String, Double> map, String key) {
-		if(map==null) {
+		if (map == null) {
 			return 0;
 		}
-		if(map.containsKey(key)) {
+		if (map.containsKey(key)) {
 			return map.get(key);
 		} else {
 			return 0;
 		}
 	}
-	
-	public static void addMap(HashMap<String, Integer> map, String key, int val) { 
-		if(map.containsKey(key)) {
+
+	public static void addMap(HashMap<String, Integer> map, String key, int val) {
+		if (map.containsKey(key)) {
 			map.put(key, map.get(key).intValue() + val);
 		} else {
 			map.put(key, val);
