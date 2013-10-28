@@ -20,17 +20,17 @@ public class ChDictionary {
 		this.surnames = Common.readSurname("dict/surname");
 		this.locationSuffix = Common.readFile2Set("dict/location_suffix");
 		// load gender number dictionary
-		loadDemonymLists("dict/demonyms.txt");
-		loadStateAbbreviation("dict/state-abbreviations.txt");
+//		loadDemonymLists("dict/demonyms.txt");
+//		loadStateAbbreviation("dict/state-abbreviations.txt");
 		adjectiveNation.addAll(demonymSet);
 		adjectiveNation.removeAll(demonyms.keySet());
 
-		animateHead = Common.readFile2Map("chinese_animate");
-		inanimateHead = Common.readFile2Map("chinese_inanimate");
-		maleHead = Common.readFile2Map("chinese_male");
-		femaleHead = Common.readFile2Map("chinese_female");
-		singleHead = Common.readFile2Map("chinese_single");
-		pluraHead = Common.readFile2Map("chinese_plura");
+		animateHead = Common.readFile2Map("dict/chinese_animate");
+		inanimateHead = Common.readFile2Map("dict/chinese_inanimate");
+		maleHead = Common.readFile2Map("dict/chinese_male");
+		femaleHead = Common.readFile2Map("dict/chinese_female");
+		singleHead = Common.readFile2Map("dict/chinese_single");
+		pluraHead = Common.readFile2Map("dict/chinese_plura");
 		countries = Common.readFile2Set("dict/country2");
 	}
 
