@@ -114,7 +114,7 @@ public class Common {
 	public static boolean isPronoun(String str) {
 		if (pronouns == null) {
 			pronouns = Common.readFile2Set(Common.class
-					.getResourceAsStream("../dict/pronoun"));
+					.getResourceAsStream("/dict/pronoun"));
 		}
 		if (pronouns.contains(str)) {
 			return true;
@@ -183,7 +183,7 @@ public class Common {
 	public static boolean isAbbreviation(String str1, String str2) {
 		if (abbreHash == null) {
 			abbreHash = new HashMap<String, Integer>();
-			ArrayList<String> lines = Common.getLines(Common.class.getResourceAsStream("../dict/abbreviation"));
+			ArrayList<String> lines = Common.getLines(Common.class.getResourceAsStream("/dict/abbreviation"));
 			for (int i = 0; i < lines.size(); i++) {
 				String line = lines.get(i);
 				String tokens[] = line.split("\\s+");
@@ -729,7 +729,7 @@ public class Common {
 	private static HashMap<String, String[]> loadSemanticDic() {
 		HashMap<String, String[]> semanticDic = new HashMap<String, String[]>();
 		ArrayList<String> lines = Common.getLines(Common.class
-				.getResourceAsStream("../dict/TongyiciCiLin_8.txt"));
+				.getResourceAsStream("/dict/TongyiciCiLin_8.txt"));
 		for (String line : lines) {
 			String tokens[] = line.split("\\s+");
 			String word = tokens[0];
