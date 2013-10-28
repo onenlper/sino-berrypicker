@@ -60,7 +60,7 @@ public class Common {
 				+ "_" + antHead);
 	}
 
-	public static String wordnet = "/usr/local/WordNet-3.0/";
+//	public static String wordnet = "/usr/local/WordNet-3.0/";
 
 	// cache, store file content
 	// public static HashMap<String, ArrayList<String>> fileCache = new
