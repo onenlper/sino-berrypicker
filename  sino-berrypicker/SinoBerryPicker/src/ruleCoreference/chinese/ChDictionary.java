@@ -19,9 +19,8 @@ public class ChDictionary {
 		allPronouns.addAll(otherPronouns);
 		// System.out.println(ChDictionary.class.getResource("../../dict/surname")
 		// + "#");
-		System.out.println(ChDictionary.class.getResource(".").getPath());
-		this.surnames = Common.readSurname(ChDictionary.class.getResource(
-				"../../dict/surname").getPath());
+		this.surnames = Common.readSurname(ChDictionary.class.getResourceAsStream(
+				"../../dict/surname"));
 		this.locationSuffix = Common.readFile2Set(ChDictionary.class.getResourceAsStream("../../dict/location_suffix"));
 		// load gender number dictionary
 		// loadDemonymLists("dict/demonyms.txt");
