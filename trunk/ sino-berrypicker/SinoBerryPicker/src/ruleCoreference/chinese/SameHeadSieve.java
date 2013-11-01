@@ -16,7 +16,7 @@ public class SameHeadSieve extends Sieve {
 //			if(antecedent.end==em.end) {
 				if(RuleCoref.bs.get(0))
 					if (ruleCoref.combine2Entities(antecedent, em, ruleCoref.sentences)) {
-					return;
+						return;
 				}
 			}
 		}

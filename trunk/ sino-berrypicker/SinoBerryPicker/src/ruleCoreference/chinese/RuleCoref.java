@@ -401,7 +401,7 @@ public class RuleCoref {
 	 * find the lowest S tree node, or older brother IP, otherwise, return root
 	 */
 	private MyTreeNode getLowestSNode(MyTreeNode node) {
-		if (node.value.equalsIgnoreCase("TOP")) {
+		if (node.value.equalsIgnoreCase("TOP") || node.value.equalsIgnoreCase("ROOT") || node.parent==null) {
 			return null;
 		}
 		for (int i = node.childIndex - 1; i >= 0; i--) {
@@ -841,6 +841,7 @@ public class RuleCoref {
 			ruleCoref.language = "chinese";
 			ruleCoref.folder = "";
 			for (Sieve sieve : sieves) {
+//				System.out.println("Sieve: " + sieve.getClass().getName());
 				ruleCoref.currentSieve = sieve;
 				sieve.act(ruleCoref);
 			}
