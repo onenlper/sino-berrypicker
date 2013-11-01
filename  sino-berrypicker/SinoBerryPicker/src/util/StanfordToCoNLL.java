@@ -1,9 +1,11 @@
-package model.stanford;
+package util;
 
 import java.util.ArrayList;
 
+import model.stanford.StanfordResult;
+import model.stanford.StanfordSentence;
+import model.stanford.StanfordXMLReader;
 import model.syntaxTree.MyTreeNode;
-import util.Common;
 
 public class StanfordToCoNLL {
 
@@ -16,7 +18,7 @@ public class StanfordToCoNLL {
 			int from = 0;
 			int to = 0;
 			String parseTree = ss.parseTree.root.getPlainText(true);
-//			System.out.println(parseTree);
+			// System.out.println(parseTree);
 			for (int i = 0; i < ss.parseTree.leaves.size(); i++) {
 				MyTreeNode leaf = ss.parseTree.leaves.get(i);
 				StringBuilder sb = new StringBuilder();
@@ -74,16 +76,13 @@ public class StanfordToCoNLL {
 	}
 
 	public static void main(String args[]) {
-		if(args.length==0) {
-			System.out.println("java -cp SinoBerryPicker.jar model.stanford.StanfordToCoNLL [stanford-output]");
+		if (args.length == 0) {
+			System.out
+					.println("java -cp SinoBerryPicker.jar model.stanford.StanfordToCoNLL [stanford-output]");
 			System.exit(1);
 		}
 		String filename = args[0];
-		ArrayList<String> lines = convert(StanfordXMLReader
-				.read(filename));
-//		for (String line : lines) {
-			// System.out.println(line);
-//		}
+		ArrayList<String> lines = convert(StanfordXMLReader.read(filename));
 		Common.outputLines(lines, filename + ".conll");
 	}
 }
