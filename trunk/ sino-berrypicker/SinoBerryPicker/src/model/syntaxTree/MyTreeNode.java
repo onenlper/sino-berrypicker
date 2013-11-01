@@ -76,6 +76,7 @@ public class MyTreeNode {
 	public int childIndex;
 	
 	public MyTreeNode(String value) {
+//		System.out.println(value);
 		this.value = value;
 		this.children = new ArrayList<MyTreeNode>();
 	}

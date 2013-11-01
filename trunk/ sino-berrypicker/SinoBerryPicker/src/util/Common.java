@@ -60,7 +60,7 @@ public class Common {
 				+ "_" + antHead);
 	}
 
-//	public static String wordnet = "/usr/local/WordNet-3.0/";
+	// public static String wordnet = "/usr/local/WordNet-3.0/";
 
 	// cache, store file content
 	// public static HashMap<String, ArrayList<String>> fileCache = new
@@ -183,7 +183,8 @@ public class Common {
 	public static boolean isAbbreviation(String str1, String str2) {
 		if (abbreHash == null) {
 			abbreHash = new HashMap<String, Integer>();
-			ArrayList<String> lines = Common.getLines(Common.class.getResourceAsStream("/dict/abbreviation"));
+			ArrayList<String> lines = Common.getLines(Common.class
+					.getResourceAsStream("/dict/abbreviation"));
 			for (int i = 0; i < lines.size(); i++) {
 				String line = lines.get(i);
 				String tokens[] = line.split("\\s+");
@@ -247,7 +248,7 @@ public class Common {
 		}
 		return lines.toString();
 	}
-	
+
 	public static ArrayList<String> getLines(String fn) {
 		ArrayList<String> lines = null;
 		try {
@@ -270,7 +271,8 @@ public class Common {
 		ArrayList<String> lines = null;
 		try {
 			lines = new ArrayList<String>();
-			BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(stream));
 			String line;
 			while ((line = br.readLine()) != null) {
 				lines.add(line);
@@ -689,8 +691,10 @@ public class Common {
 				if (treeStr.charAt(j) == '(' && treeStr.charAt(j + 1) != ')') {
 					i = j - 1;
 				} else {
-					int m = j;
-					while (treeStr.charAt(m) != ')') {
+					int m = j + 1;
+					while (!(treeStr.charAt(m) == ')' && (m == treeStr.length() - 1
+							|| treeStr.charAt(m + 1) == ' ' || treeStr
+								.charAt(m + 1) == ')'))) {
 						m++;
 					}
 					String value2 = treeStr.substring(j, m);
@@ -795,18 +799,13 @@ public class Common {
 	}
 
 	public static void main(String args[]) {
-		// String treeStr =
-		// "(ROOT  (IP    (NP      (NP (NR 台湾) (NR 陈水扁))      (NP (NN 总统)))    (VP (VV 任命)      (IP        (NP          (NP            (NP (NR 高雄))            (NP (NN 市长)))          (NP (NR 谢长廷)))        (VP (VC 为)          (NP            (ADJP (JJ 新任))            (NP (NN 行政) (NN 院长))))))    (PU -) (PU -)))";
-		// Tree tree = Common.constructTree(treeStr);
-		// TreeNode tn = tree.leaves.get(5);
-		// TreeNode parent = tn.parent;
-		// while (parent != tree.root) {
-		// System.out.println(parent.value);
-		// parent = parent.parent;
-		// }
-		String str1 = "中国人民";
-		String str2 = "中华人民共和国";
-		System.out.println(Common.getEditDistance(str1, str2));
+		String treeStr = "(ROOT (UCP (IP (NP (NN 警方)) (VP (VV 接报) (VP (VP (VV 到场) (NP (NN 调查))) (PU ，) (CC 并) (VP (VV 寻获) (NP (QP (CD 两) (CLP (M 名))) (NP (NN 伤者))))))) (PU ，) (CP (IP (ADVP (PN 他们)) (NP (NP (CP (IP (VP (ADVP (AD 分别)) (VP (VV 姓林))))) (PU () (NP (QP (CD 25) (CLP (M 岁)))) (PU ))) (CC 及) (NP (NN 姓郑))) (PU () (VP (QP (CD 22) (CLP (M 岁))))) (PU ))) (PU ，) (IP (NP (NN 救护车)) (VP (VP (VV 到场) (VP (BA 将) (IP (NP (PN 他们)) (VP (VV 送到) (NP (NP (NR 屯门)) (NP (NN 医院))))))) (VP (VV 抢救)))) (PU 。)))";
+
+		MyTree tree = Common.constructTree(treeStr);
+
+		for (MyTreeNode leaf : tree.leaves) {
+			System.out.println(leaf.value);
+		}
 
 		// HashMap<String, ArrayList<String>> newDic = new HashMap<String,
 		// ArrayList<String>>();

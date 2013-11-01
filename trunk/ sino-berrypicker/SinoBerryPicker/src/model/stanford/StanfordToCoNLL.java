@@ -16,7 +16,7 @@ public class StanfordToCoNLL {
 			int from = 0;
 			int to = 0;
 			String parseTree = ss.parseTree.root.getPlainText(true);
-			System.out.println(parseTree);
+//			System.out.println(parseTree);
 			for (int i = 0; i < ss.parseTree.leaves.size(); i++) {
 				MyTreeNode leaf = ss.parseTree.leaves.get(i);
 				StringBuilder sb = new StringBuilder();

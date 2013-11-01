@@ -166,6 +166,7 @@ public class CoNLLDocument {
 			sentence.setSpeaker(tokens[9]);
 			word.speaker = tokens[9];
 			//11 	Named Entities
+//			System.out.println(line);
 			word.setRawNamedEntity(tokens[10]);
 			//12	Predicate Arguments
 			StringBuilder argument = new StringBuilder();
