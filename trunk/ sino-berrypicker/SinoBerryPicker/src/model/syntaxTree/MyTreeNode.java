@@ -22,7 +22,7 @@ public class MyTreeNode {
 
 	public ArrayList<MyTreeNode> children;
 
-	public boolean mark = false;
+	public boolean mark = true;
 
 	public MyTreeNode parent;
 

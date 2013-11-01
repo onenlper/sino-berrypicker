@@ -2,17 +2,19 @@ package model.stanford;
 
 import java.util.ArrayList;
 
+import util.Common;
+
 public class StanfordToCoNLL {
 	
 	public static ArrayList<String> convert(StanfordResult result) {
 
 		ArrayList<String> lines = new ArrayList<String>();
 		lines.add("#begin document " + result.documentID);
+		
 		for(StanfordSentence ss : result.sentences) {
-			
-			String parseTree = ss.parseTree.toString();
 			int from = 0;
 			int to = 0;
+			String parseTree = ss.parseTree.root.getPlainText(true); 
 			for(StanfordToken token : ss.tokens) {
 				StringBuilder sb = new StringBuilder();
 				// documentID
@@ -27,9 +29,15 @@ public class StanfordToCoNLL {
 				sb.append(token.POS).append("\t");
 				// Parse bit
 				String key = " (" + token.POS + " " + token.word + ")";
-				to = parseTree.indexOf(key, from);
-				sb.append(parseTree.substring(from, to).trim());
-				to = from + key.length();
+				to = parseTree.indexOf(key, from) + key.length();
+				
+				while(to<parseTree.length() && parseTree.charAt(to)==')') {
+					to++;
+				}
+				
+				String treeEle = parseTree.substring(from, to).trim().replace(" " + token.word + ")", " *)");
+				
+				sb.append(treeEle).append("\t");
 				// Predicate lemma
 				sb.append("-").append("\t");
 				// Predicate Frameset ID
@@ -46,6 +54,9 @@ public class StanfordToCoNLL {
 				}
 				
 				lines.add(sb.toString());
+				
+				
+				from = to;
 			}
 			
 			
@@ -62,5 +73,6 @@ public class StanfordToCoNLL {
 		for(String line : lines) {
 			System.out.println(line);
 		}
+		Common.outputLines(lines, "output");
 	}
 }
