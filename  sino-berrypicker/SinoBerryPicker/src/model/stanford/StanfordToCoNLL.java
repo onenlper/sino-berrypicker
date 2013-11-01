@@ -2,41 +2,53 @@ package model.stanford;
 
 import java.util.ArrayList;
 
+import model.syntaxTree.MyTreeNode;
 import util.Common;
 
 public class StanfordToCoNLL {
-	
+
 	public static ArrayList<String> convert(StanfordResult result) {
 
 		ArrayList<String> lines = new ArrayList<String>();
 		lines.add("#begin document " + result.documentID);
-		
-		for(StanfordSentence ss : result.sentences) {
+
+		for (StanfordSentence ss : result.sentences) {
 			int from = 0;
 			int to = 0;
-			String parseTree = ss.parseTree.root.getPlainText(true); 
-			for(StanfordToken token : ss.tokens) {
+			String parseTree = ss.parseTree.root.getPlainText(true);
+			System.out.println(parseTree);
+			for (int i = 0; i < ss.parseTree.leaves.size(); i++) {
+				MyTreeNode leaf = ss.parseTree.leaves.get(i);
 				StringBuilder sb = new StringBuilder();
 				// documentID
 				sb.append(result.documentID).append("\t");
 				// partID
 				sb.append("0").append("\t");
 				// word number
-				sb.append(token.id).append("\t");
+				sb.append(i).append("\t");
 				// word itself
-				sb.append(token.word).append("\t");
+				String token = leaf.value;
+				sb.append(leaf.value).append("\t");
 				// Part-of-Speech
-				sb.append(token.POS).append("\t");
+				String pos = leaf.parent.value;
+				if (!(pos.charAt(0) > 'A' && pos.charAt(0) < 'Z')
+						&& pos.length() == 1) {
+					sb.append("PU").append("\t");
+				} else {
+					sb.append(pos).append("\t");
+				}
+
 				// Parse bit
-				String key = " (" + token.POS + " " + token.word + ")";
+				String key = "(" + pos + " " + token + ")";
 				to = parseTree.indexOf(key, from) + key.length();
-				
-				while(to<parseTree.length() && parseTree.charAt(to)==')') {
+
+				while (to < parseTree.length() && parseTree.charAt(to) == ')') {
 					to++;
 				}
-				
-				String treeEle = parseTree.substring(from, to).trim().replace(" " + token.word + ")", " *)");
-				
+
+				String treeEle = parseTree.substring(from, to).trim()
+						.replace(key, "*").replaceAll("\\s+", "");
+
 				sb.append(treeEle).append("\t");
 				// Predicate lemma
 				sb.append("-").append("\t");
@@ -47,32 +59,31 @@ public class StanfordToCoNLL {
 				// Speaker/Author
 				sb.append("-").append("\t");
 				// Named Entities
-				String ne = token.ner;
 				String neToken = "*";
-				if(!ne.equalsIgnoreCase("other")) {
-					
+				if (!neToken.equalsIgnoreCase("other")) {
+					sb.append(neToken).append("\t");
 				}
-				
 				lines.add(sb.toString());
-				
-				
 				from = to;
 			}
-			
-			
-			
-			lines.add("\n");
+			lines.add("");
 		}
 		lines.add("#end document");
-		
+
 		return lines;
 	}
-	
+
 	public static void main(String args[]) {
-		ArrayList<String> lines = convert(StanfordXMLReader.read("/users/yzcchen/chen3/NAACL/corpus/EECB1.0/data/1/1.stanford")); 
-		for(String line : lines) {
-			System.out.println(line);
+		if(args.length==0) {
+			System.out.println("java -cp SinoBerryPicker.jar model.stanford.StanfordToCoNLL [stanford-output]");
+			System.exit(1);
 		}
-		Common.outputLines(lines, "output");
+		String filename = args[0];
+		ArrayList<String> lines = convert(StanfordXMLReader
+				.read(filename));
+//		for (String line : lines) {
+			// System.out.println(line);
+//		}
+		Common.outputLines(lines, filename + ".conll");
 	}
 }

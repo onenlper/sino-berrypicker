@@ -67,16 +67,7 @@ public class CoNLLDocument {
 		}
 		this.setType(DocType.Article);
 		this.filePath = path;
-		if(filePath.contains("chinese") || filePath.contains("chi")) {
-			this.language = "chinese";
-		} else if (filePath.contains("english")) {
-			this.language = "english";
-		} else if (filePath.contains("arabic")) {
-			this.language = "arabic";
-		} else {
-			//default english
-			this.language = "english";
-		}
+		this.language = "chinese";
 //		this.ontoCommon = new OntoCommon(this.getLanguage());
 		this.ontoCommon = new ChCommon("chinese");
 		this.rawLines = Common.getLines(path);
@@ -156,6 +147,8 @@ public class CoNLLDocument {
 				word.setOrig(wordStr);
 				word.setWord(stem.toLowerCase());
 			}
+//			System.out.println(line);
+//			System.out.println(word.word);
 			
 			// 6 	Parse bit
 			parseBits.append(tokens[5].replace("*", " ("+pos+" "+wordStr.toLowerCase()+")").replace("(", " ("));
