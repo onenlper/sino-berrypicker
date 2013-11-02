@@ -17,15 +17,15 @@ import util.Common;
  * CoNLL-2012 Format Document
  */
 public class CoNLLDocument {
-	
+
 	public boolean addZero;
-	
+
 	public enum DocType {
 		Article, Conversation
 	}
-	
+
 	private DocType type;
-	
+
 	public DocType getType() {
 		return type;
 	}
@@ -35,50 +35,51 @@ public class CoNLLDocument {
 	}
 
 	private ArrayList<String> rawLines;
-	
+
 	private String documentID;
-	
+
 	private String filePath;
-	
+
 	private String filePrefix;
-	
+
 	private String language;
-	
+
 	private ArrayList<CoNLLPart> parts;
-	
-//	public OntoCommon ontoCommon;
-	
+
+	// public OntoCommon ontoCommon;
+
 	public ChCommon ontoCommon;
-	
+
 	public CoNLLDocument() {
 		this.parts = new ArrayList<CoNLLPart>();
-//		this.ontoCommon = new OntoCommon("chinese");
+		// this.ontoCommon = new OntoCommon("chinese");
 		this.ontoCommon = new ChCommon("chinese");
 	}
-	
+
 	public CoNLLDocument(String path) {
-		path = path.replace("v6", "v4").replace("_gold_parse_conll", "_auto_conll");
-		if(!(new File(path).exists())) {
+		path = path.replace("v6", "v4").replace("_gold_parse_conll",
+				"_auto_conll");
+		if (!(new File(path).exists())) {
 			path = path.replace("v5", "v4").replace("v6", "v4");
 		}
-		
-		if(!(new File(path).exists())) {
+
+		if (!(new File(path).exists())) {
 			path = path.replace("_auto_conll", "_gold_conll");
 		}
 		this.setType(DocType.Article);
 		this.filePath = path;
 		this.language = "chinese";
-//		this.ontoCommon = new OntoCommon(this.getLanguage());
+		// this.ontoCommon = new OntoCommon(this.getLanguage());
 		this.ontoCommon = new ChCommon("chinese");
 		this.rawLines = Common.getLines(path);
 		int i = path.lastIndexOf(".");
-		if(i!=-1) {
+		if (i != -1) {
 			this.filePrefix = path.substring(0, i);
 		}
 		this.parts = new ArrayList<CoNLLPart>();
 		this.parseFile();
 	}
-	
+
 	/*
 	 * parse CoNLL format file
 	 */
@@ -87,16 +88,16 @@ public class CoNLLDocument {
 		CoNLLSentence sentence = null;
 		StringBuilder parseBits = null;
 		StringBuilder sentenceStr = null;
-		int wordIdx=0;
+		int wordIdx = 0;
 		String previousSpeaker = "";
-		for(String line : rawLines) {
-//			System.out.println(line);
-			if(line.startsWith("#end document")) {
+		for (String line : rawLines) {
+			// System.out.println(line);
+			if (line.startsWith("#end document")) {
 				part.postProcess();
 				continue;
 			}
 			// new part
-			if(line.startsWith("#begin document")) {
+			if (line.startsWith("#begin document")) {
 				part = new CoNLLPart();
 				part.label = line;
 				wordIdx = 0;
@@ -106,83 +107,87 @@ public class CoNLLDocument {
 				continue;
 			}
 			// end of one sentence
-			if(line.trim().isEmpty()) {
+			if (line.trim().isEmpty()) {
 				sentence.setSentence(sentenceStr.toString());
 				sentence.setWordsCount(sentence.words.size());
-				String parseTree = parseBits.toString().replace("(", " (").trim();
-				if(parseTree.startsWith("( (")) {
+				String parseTree = parseBits.toString().replace("(", " (")
+						.trim();
+				if (parseTree.startsWith("( (")) {
 					parseTree = "(TOP " + parseTree.substring(1);
 				}
 				sentence.addSyntaxTree(parseTree);
-				if(this.language.equalsIgnoreCase("english")) {
+				if (this.language.equalsIgnoreCase("english")) {
 				}
 				part.addSentence(sentence);
 				sentence = null;
 				continue;
 			}
-			if(sentence==null) {
+			if (sentence == null) {
 				sentence = new CoNLLSentence();
 				parseBits = new StringBuilder();
 				sentenceStr = new StringBuilder();
 			}
 			String tokens[] = line.split("\\s+");
 			CoNLLWord word = new CoNLLWord();
-			
+
 			word.sourceLine = line;
-			
-			// 1 	Document ID
+
+			// 1 Document ID
 			this.documentID = tokens[0];
-			// 2 	Part number
+			// 2 Part number
 			part.setPartID(Integer.valueOf(tokens[1]));
-			part.setPartName(part.getDocument().getDocumentID().replace("/", "-") + "_" + part.getPartID());
-			// 3 	Word number
-			// 5 	Part-of-Speech
+			part.setPartName(part.getDocument().getDocumentID()
+					.replace("/", "-")
+					+ "_" + part.getPartID());
+			// 3 Word number
+			// 5 Part-of-Speech
 			String pos = tokens[4];
 			word.setPosTag(pos);
-			// 4 	Word itself
+			// 4 Word itself
 			String wordStr = tokens[3];
 			String stem = wordStr;
-			// if language is english, use  wordnet to do stem
-			if(this.language.equalsIgnoreCase("chinese")) {
-				word.setOrig(wordStr);
-				word.setWord(stem.toLowerCase());
-			}
-//			System.out.println(line);
-//			System.out.println(word.word);
-			
-			// 6 	Parse bit
-			parseBits.append(tokens[5].replace("*", " ("+pos+" "+wordStr.toLowerCase()+")").replace("(", " ("));
-			// 7 	Predicate lemma
+			// if language is english, use wordnet to do stem
+			word.setOrig(wordStr);
+			word.setWord(stem.toLowerCase());
+			// System.out.println(line);
+			// System.out.println(word.word);
+
+			// 6 Parse bit
+			parseBits.append(tokens[5].replace("*",
+					" (" + pos + " " + wordStr.toLowerCase() + ")").replace(
+					"(", " ("));
+			// 7 Predicate lemma
 			word.setPredicateLemma(tokens[6]);
-			// 8 	Predicate Frameset ID
+			// 8 Predicate Frameset ID
 			word.setPredicateFramesetID(tokens[7]);
-			// 9 	Word sense
+			// 9 Word sense
 			word.setWordSense(tokens[8]);
-			//10 	Speaker/Author
-			if(!previousSpeaker.isEmpty() && !tokens[9].equalsIgnoreCase(previousSpeaker)) {
+			// 10 Speaker/Author
+			if (!previousSpeaker.isEmpty()
+					&& !tokens[9].equalsIgnoreCase(previousSpeaker)) {
 				this.setType(DocType.Conversation);
 			}
 			previousSpeaker = tokens[9];
 			sentence.setSpeaker(tokens[9]);
 			word.speaker = tokens[9];
-			//11 	Named Entities
-//			System.out.println(line);
+			// 11 Named Entities
+			// System.out.println(line);
 			word.setRawNamedEntity(tokens[10]);
-			//12	Predicate Arguments
+			// 12 Predicate Arguments
 			StringBuilder argument = new StringBuilder();
-			for(int i=11;i<tokens.length-1;i++) {
+			for (int i = 11; i < tokens.length - 1; i++) {
 				argument.append(tokens[i]).append(" ");
 			}
 			word.setPredicateArgument(argument.toString().trim());
-			//13	Coreference
-			word.setRawCoreference(tokens[tokens.length-1]);
+			// 13 Coreference
+			word.setRawCoreference(tokens[tokens.length - 1]);
 			sentence.addWord(word);
 			word.setIndex(wordIdx);
 			sentenceStr.append(wordStr).append(" ");
 			wordIdx++;
 		}
 	}
-	
+
 	public String getLanguage() {
 		return language;
 	}
@@ -230,36 +235,40 @@ public class CoNLLDocument {
 	public void setParts(ArrayList<CoNLLPart> parts) {
 		this.parts = parts;
 	}
-	
+
 	/*
 	 * Test CoNLL format converter
 	 */
 	public static void main(String args[]) {
 		String conllPath = "";
-//		conllPath = "/users/yzcchen/CoNLL-2012/conll-2012/v1/data/train/data/chinese/annotations/nw/xinhua/00/chtb_0001.v1_gold_conll";
+		// conllPath =
+		// "/users/yzcchen/CoNLL-2012/conll-2012/v1/data/train/data/chinese/annotations/nw/xinhua/00/chtb_0001.v1_gold_conll";
 		conllPath = "/users/yzcchen/CoNLL-2012/conll-2012/v1/data/train/data/english/annotations/bc/cctv/00/cctv_0001.v1_auto_conll";
 		CoNLLDocument document = new CoNLLDocument(conllPath);
 		System.out.println("Document ID: " + document.getDocumentID());
-		for(CoNLLPart part : document.parts) {
+		for (CoNLLPart part : document.parts) {
 			System.out.println("Part ID: " + part.getPartID());
-			System.out.println("===================sentences===================");
-			for(CoNLLSentence sentence : part.getCoNLLSentences()) {
+			System.out
+					.println("===================sentences===================");
+			for (CoNLLSentence sentence : part.getCoNLLSentences()) {
 				System.out.println(sentence.getSentence());
 			}
 		}
-		for(CoNLLPart part : document.parts) {
+		for (CoNLLPart part : document.parts) {
 			System.out.println("Part ID: " + part.getPartID());
-			System.out.println("===================named entities================");
-			for(Element element : part.getNameEntities()) {
+			System.out
+					.println("===================named entities================");
+			for (Element element : part.getNameEntities()) {
 				System.out.println(element);
 			}
 		}
-		for(CoNLLPart part : document.parts) {
+		for (CoNLLPart part : document.parts) {
 			System.out.println("Part ID: " + part.getPartID());
-			System.out.println("===================coreference chains================");
-			for(Entity entity : part.getChains()) {
+			System.out
+					.println("===================coreference chains================");
+			for (Entity entity : part.getChains()) {
 				StringBuilder sb = new StringBuilder();
-				for(EntityMention em : entity.mentions) {
+				for (EntityMention em : entity.mentions) {
 					sb.append(em).append(" ");
 				}
 				System.out.println(sb.toString());
