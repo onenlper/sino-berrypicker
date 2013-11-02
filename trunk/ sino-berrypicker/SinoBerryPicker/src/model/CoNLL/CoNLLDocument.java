@@ -131,7 +131,6 @@ public class CoNLLDocument {
 			CoNLLWord word = new CoNLLWord();
 
 			word.sourceLine = line;
-
 			// 1 Document ID
 			this.documentID = tokens[0];
 			// 2 Part number
