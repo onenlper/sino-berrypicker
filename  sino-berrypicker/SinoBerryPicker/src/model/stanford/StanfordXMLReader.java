@@ -107,10 +107,11 @@ public class StanfordXMLReader extends DefaultHandler {
 		if (tags.size() >= 2) {
 			tag2 = tags.get(tags.size() - 2);
 		}
+		String str = new String(ch, start, length);
 		if (tag.equalsIgnoreCase("word")) {
-			token.setWord(new String(ch, start, length));
+			token.setWord(token.getWord()==null?str:token.getWord()+str);
 		} else if (tag.equalsIgnoreCase("lemma")) {
-			token.setLemma(new String(ch, start, length));
+			token.setLemma(token.getLemma()==null?str:token.getLemma()+str);
 		} else if (tag.equalsIgnoreCase("CharacterOffsetBegin")) {
 			token.setCharacterOffsetBegin(Integer.valueOf(new String(ch, start, length)));
 		} else if (tag.equalsIgnoreCase("CharacterOffsetEnd")) {
