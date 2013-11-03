@@ -348,7 +348,7 @@ public class CoNLLPart {
 									}
 								}
 								EntityMention subject = null;
-								if (VP != null) {
+								if (VP != null && VP.parent!=null) {
 									MyTreeNode NP = null;
 									for (int m = VP.childIndex - 1; m >= 0; m--) {
 										if (VP.parent.children.get(m).value.equalsIgnoreCase("NP")) {
