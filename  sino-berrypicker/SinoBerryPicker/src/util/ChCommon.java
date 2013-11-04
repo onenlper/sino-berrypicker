@@ -305,6 +305,12 @@ public class ChCommon {
 			int headPos = em.end;
 			while (part.getWord(headPos).posTag.equals("PU")) {
 				headPos--;
+				if(headPos<em.start) {
+					break;
+				}
+			}
+			if(headPos<em.start) {
+				headPos = em.end;
 			}
 			if (part.getWord(em.end).word.equals("自己") && em.end != em.start) {
 				headPos--;
