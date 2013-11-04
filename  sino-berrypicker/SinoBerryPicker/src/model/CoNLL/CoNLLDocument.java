@@ -128,6 +128,11 @@ public class CoNLLDocument {
 				sentenceStr = new StringBuilder();
 			}
 			String tokens[] = line.split("\\s+");
+			
+			if(tokens.length==10) {
+				tokens = line.split("\\s");
+			}
+			
 			CoNLLWord word = new CoNLLWord();
 
 			word.sourceLine = line;
