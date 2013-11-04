@@ -316,7 +316,7 @@ public class ChineseMention {
 			}
 
 			// 你 知道
-			if (mention.source.equalsIgnoreCase("你") && mention.start > 0
+			if (mention.source.equalsIgnoreCase("你") && mention.start+1<part.getWordCount()
 					&& part.getWord(mention.start + 1).word.equals("知道")) {
 				removes.add(mention);
 				continue;
