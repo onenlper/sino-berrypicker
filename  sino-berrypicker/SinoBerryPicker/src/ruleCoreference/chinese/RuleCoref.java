@@ -15,9 +15,9 @@ import model.Element;
 import model.Entity;
 import model.EntityMention;
 import model.CoNLL.CoNLLDocument;
+import model.CoNLL.CoNLLDocument.DocType;
 import model.CoNLL.CoNLLPart;
 import model.CoNLL.CoNLLSentence;
-import model.CoNLL.CoNLLDocument.DocType;
 import model.syntaxTree.MyTreeNode;
 import util.ChCommon;
 import util.Common;
@@ -832,6 +832,13 @@ public class RuleCoref {
 	public static void run(String filename, ArrayList<Boolean> bs2) throws Exception {
 		bs = bs2;
 		open = false;
+		
+		if((new File(filename + ".ner")).exists()) {
+			open = true;
+			ChCommon.loadPredictNE(filename + ".ner");
+			System.out.println("load named entity");
+		}
+		
 		CoNLLDocument document = new CoNLLDocument(filename);
 		loadSieves();
 		FileWriter fw = new FileWriter(filename + ".coref");
@@ -849,6 +856,8 @@ public class RuleCoref {
 			writerKey(fw, filterEntities(entities), part);
 		}
 		fw.close();
+		
+		System.out.println("Output: " + filename + ".coref");
 	}
 
 	public static void writerKey(FileWriter systemKeyFw, ArrayList<Entity> systemChain, CoNLLPart part)

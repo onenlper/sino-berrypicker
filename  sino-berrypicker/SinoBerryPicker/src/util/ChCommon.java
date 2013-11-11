@@ -98,6 +98,46 @@ public class ChCommon {
 			}
 		}
 	}
+	
+	public static void loadPredictNE(String fn) {
+		if (predictNEs == null) {
+			predictNEs = new HashMap<String, ArrayList<Element>>();
+			ArrayList<String> lines = Common.getLines(fn);
+			for (int i = 0; i < lines.size(); i++) {
+				String line = lines.get(i);
+				if (line.isEmpty()) {
+					continue;
+				}
+				String tokens[] = line.split("\\s+");
+				int length = tokens.length;
+				String label = tokens[length - 1];
+				int wordID = Integer.valueOf(tokens[length - 3]);
+				int partID = Integer.valueOf(tokens[length - 4]);
+				String docID = tokens[length - 5];
+				String key = docID + "_" + partID;
+				if (label.startsWith("B")) {
+					String content = label.substring(2);
+					int k = i + 1;
+					while (!lines.get(k).isEmpty() && lines.get(k).trim().endsWith("I")) {
+						k++;
+					}
+					int start = wordID;
+					int end = Integer.valueOf(lines.get(k - 1).split("\\s+")[length - 3]);
+					Element element = new Element();
+					element.start = start;
+					element.end = end;
+					element.content = content;
+					if (predictNEs.containsKey(key)) {
+						predictNEs.get(key).add(element);
+					} else {
+						ArrayList<Element> ems = new ArrayList<Element>();
+						ems.add(element);
+						predictNEs.put(key, ems);
+					}
+				}
+			}
+		}
+	}
 
 	public boolean numberInLaterMention(EntityMention ant, EntityMention mention, CoNLLPart part) {
 		Set<String> antecedentWords = new HashSet<String>();

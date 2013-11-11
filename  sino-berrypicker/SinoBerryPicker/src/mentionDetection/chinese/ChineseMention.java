@@ -25,15 +25,9 @@ public class ChineseMention {
 	public static boolean goldNE = false;
 
 	public ArrayList<EntityMention> getChineseMention(CoNLLPart part) {
-		if (part.getDocument().getFilePath().contains("development")
-				|| part.getDocument().getFilePath().contains("test")) {
-			if (ruleCoreference.chinese.RuleCoref.open) {
-				part.setNameEntities(getChNE(part));
-				// part.setNameEntities(getChGoldNE(part));
-			}
-			if (goldNE) {
-				part.setNameEntities(getChGoldNE(part));
-			}
+		if (ruleCoreference.chinese.RuleCoref.open) {
+			part.setNameEntities(getChNE(part));
+			// part.setNameEntities(getChGoldNE(part));
 		}
 		ArrayList<EntityMention> mentions = new ArrayList<EntityMention>();
 		// setSystemParseTree(part);
@@ -224,6 +218,7 @@ public class ChineseMention {
 				if (element.start <= headStart && headStart <= element.end) {
 					// if (headStart == element.end) {
 					mention.ner = element.content;
+//					System.out.println(mention.extendCharEnd + " " + element.content);
 					// System.out.println(mention.source + " : " + mention.ner);
 				}
 			}
