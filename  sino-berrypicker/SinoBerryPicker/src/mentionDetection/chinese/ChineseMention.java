@@ -41,7 +41,6 @@ public class ChineseMention {
 		// setGoldParseTree(part);
 
 		// addSamewordEM(part, mentions);
-
 		removeDuplicateMentions(mentions);
 		pruneChMentions(mentions, part);
 
@@ -142,7 +141,6 @@ public class ChineseMention {
 
 			// System.out.println(goldPart.);
 		}
-
 		return goldPart.getNameEntities();
 	}
 
